@@ -20,5 +20,8 @@
   "homepage": "https://github.com/waffledood/gitty#readme",
   "devDependencies": {
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "octokit": "^5.0.5"
   }
 }
