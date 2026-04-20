@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/waffledood/gitty/issues"
   },
-  "homepage": "https://github.com/waffledood/gitty#readme"
+  "homepage": "https://github.com/waffledood/gitty#readme",
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
 }
