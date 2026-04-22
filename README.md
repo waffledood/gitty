@@ -12,3 +12,11 @@ A TypeScript CLI for interacting with GitHub repositories, issues, and workflows
    ```
 
 2. Update the properties inside `.env`
+
+## Misc
+
+Packages to consider for creating a CLI:
+
+- `inquirer`
+- `prompts`
+- `commander`
