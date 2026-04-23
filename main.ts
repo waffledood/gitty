@@ -1,6 +1,7 @@
 import ok from "./octokit";
 import config from "./config";
 import commands from "./commands";
+import { CommandType } from "./commands";
 
 import { input, confirm, search } from "@inquirer/prompts";
 
@@ -46,22 +47,23 @@ while (true) {
     },
   });
 
-  console.log("command:", command);
+  switch (command) {
+    case CommandType.repos:
+      const response = await ok.request("GET /users/{username}/repos", {
+        username: config.username,
+        headers: {
+          "X-GitHub-Api-Version": "2026-03-10",
+        },
+      });
 
-  const response = await ok.request("GET /users/{username}/repos", {
-    username: config.username,
-    headers: {
-      "X-GitHub-Api-Version": "2026-03-10",
-    },
-  });
+      const repos: string[] = [];
 
-  const repos: string[] = [];
+      response.data.forEach(({ name }) => {
+        repos.push(name);
+      });
 
-  response.data.forEach(({ name }) => {
-    repos.push(name);
-  });
-
-  console.log(repos.splice(5).join("\n"));
+      console.log(repos.splice(-5).join("\n"));
+  }
 
   break;
 }
