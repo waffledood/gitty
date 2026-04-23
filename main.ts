@@ -1,9 +1,11 @@
 import ok from "./octokit";
 import config from "./config";
+import commands from "./commands";
 
-import { input, confirm } from "@inquirer/prompts";
+import { input, confirm, search } from "@inquirer/prompts";
 
 while (true) {
+  // initial setup
   if (!config.setupDone) {
     console.log(
       "Welcome to gitty! As this is your first time using gitty, please follow through the setup process.",
@@ -26,6 +28,25 @@ while (true) {
     config.username = githubUsername;
     config.setupDone = true;
   }
+
+  // process input from user
+  const command = await search({
+    message: "Select a command",
+    source: async (input, { signal }) => {
+      if (!input) {
+        return [];
+      }
+
+      return commands
+        .filter((command) => command.name.startsWith(input))
+        .map((command) => ({
+          name: command.name,
+          value: command.name,
+        }));
+    },
+  });
+
+  console.log("command:", command);
 
   const response = await ok.request("GET /users/{username}/repos", {
     username: config.username,
