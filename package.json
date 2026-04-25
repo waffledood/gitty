@@ -2,7 +2,10 @@
   "name": "gitty",
   "version": "1.0.0",
   "description": "A TypeScript CLI for interacting with GitHub repositories, issues, and workflows from your terminal.",
-  "main": "index.js",
+  "main": "main.ts",
+  "bin": {
+    "gitty": "./bin/gitty.mjs"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
