@@ -1,12 +1,17 @@
 {
-  "name": "gitty",
+  "name": "@waffledood/gitty",
   "version": "1.0.0",
   "description": "A TypeScript CLI for interacting with GitHub repositories, issues, and workflows from your terminal.",
-  "main": "main.ts",
+  "main": "dist/gitty.cjs",
   "bin": {
-    "gitty": "./bin/gitty.mjs"
+    "gitty": "./dist/gitty.cjs"
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
+    "build": "esbuild main.ts --bundle --platform=node --outfile=dist/gitty.cjs \"--banner:js=#!/usr/bin/env node\"",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +27,7 @@
   },
   "homepage": "https://github.com/waffledood/gitty#readme",
   "devDependencies": {
+    "esbuild": "^0.28.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
