@@ -1,6 +1,6 @@
 import { Octokit } from "octokit";
-import { token } from "./config";
+import { loadConfig } from "./config";
 
-const ok = new Octokit({ auth: token });
+const ok = new Octokit({ auth: loadConfig().token });
 
 export default ok;
