@@ -1,69 +1,53 @@
-import ok from "./octokit";
-import config from "./config";
-import commands from "./commands";
-import { CommandType } from "./commands";
+import { Command } from "commander";
+import { loadConfig, saveConfig } from "./config";
+import { input, confirm, password } from "@inquirer/prompts";
+import ok from "./octokit.js";
 
-import { input, confirm, search } from "@inquirer/prompts";
+const program = new Command();
+program.name("gitty").description("GitHub CLI tool").version("1.0.0");
 
-while (true) {
-  // initial setup
-  if (!config.setupDone) {
-    console.log(
-      "Welcome to gitty! As this is your first time using gitty, please follow through the setup process.",
-    );
+const auth = program.command("auth").description("Authentication and setup");
 
-    var githubUsername = await input({
-      message: "Enter your GitHub username:",
+auth
+  .command("setup")
+  .description("Configure your gitty settings")
+  .action(async () => {
+    const config = loadConfig();
+
+    let username = await input({ message: "Enter your GitHub username:" });
+    const confirmed = await confirm({
+      message: `Username is ${username}, confirm?`,
     });
 
-    const confirmUsername = await confirm({
-      message: `Your GitHub username is ${githubUsername}`,
-    });
-
-    if (!confirmUsername) {
-      githubUsername = await input({
-        message: "Enter your GitHub username:",
-      });
+    if (!confirmed) {
+      username = await input({ message: "Enter your GitHub username:" });
     }
+    saveConfig({ ...config, username });
 
-    config.username = githubUsername;
-    config.setupDone = true;
-  }
+    const token = await password({
+      message: "Enter your GitHub personal access token:",
+    });
+    saveConfig({ ...config, token });
 
-  // process input from user
-  const command = await search({
-    message: "Select a command",
-    source: async (input, { signal }) => {
-      if (!input) {
-        return [];
-      }
-
-      return commands
-        .filter((command) => command.name.startsWith(input))
-        .map((command) => ({
-          name: command.name,
-          value: command.name,
-        }));
-    },
+    console.log("Setup complete.");
   });
 
-  switch (command) {
-    case CommandType.repos:
-      const response = await ok.request("GET /users/{username}/repos", {
-        username: config.username,
-        headers: {
-          "X-GitHub-Api-Version": "2026-03-10",
-        },
-      });
+const repo = program.command("repo").description("Repository commands");
 
-      const repos: string[] = [];
+repo
+  .command("list")
+  .description("List your repositories")
+  .action(async () => {
+    const config = loadConfig();
+    if (!config.username) {
+      console.error("Run `gitty auth setup` first.");
+      process.exit(1);
+    }
+    const response = await ok.request("GET /users/{username}/repos", {
+      username: config.username,
+      headers: { "X-GitHub-Api-Version": "2026-03-10" },
+    });
+    response.data.forEach(({ name }: { name: string }) => console.log(name));
+  });
 
-      response.data.forEach(({ name }) => {
-        repos.push(name);
-      });
-
-      console.log(repos.splice(-5).join("\n"));
-  }
-
-  break;
-}
+program.parse();
