@@ -1,9 +1,23 @@
 import "dotenv/config";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { homedir } from "os";
+import { join } from "path";
 
-const config = {
-  token: process.env.GITHUB_TOKEN || "",
-  setupDone: false,
-  username: "",
-};
+export interface Config {
+  username: string;
+}
 
-export default config;
+const configDir = join(homedir(), ".config", "gitty");
+const configPath = join(configDir, "config.json");
+
+export function loadConfig(): Config {
+  if (!existsSync(configPath)) return { username: "" };
+  return JSON.parse(readFileSync(configPath, "utf-8")) as Config;
+}
+
+export function saveConfig(config: Config): void {
+  mkdirSync(configDir, { recursive: true });
+  writeFileSync(configPath, JSON.stringify(config, null, 2));
+}
+
+export const token = process.env.GITHUB_TOKEN ?? "";
