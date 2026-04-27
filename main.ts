@@ -68,4 +68,14 @@ config
     console.log("Username updated.");
   });
 
+config
+  .command("token")
+  .argument("<token>", "GitHub personal access token")
+  .description("Set GitHub personal access token")
+  .action((token) => {
+    const config = loadConfig();
+    saveConfig({ ...config, token });
+    console.log("Token updated.");
+  });
+
 program.parse();
