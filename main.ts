@@ -6,31 +6,28 @@ import ok from "./octokit.js";
 const program = new Command();
 program.name("gitty").description("GitHub CLI tool").version("1.0.0");
 
-const auth = program.command("auth").description("Authentication and setup");
+const setup = program.command("setup").description("Setup gitty");
 
-auth
-  .command("setup")
-  .description("Configure your gitty settings")
-  .action(async () => {
-    const config = loadConfig();
+setup.action(async () => {
+  const config = loadConfig();
 
-    let username = await input({ message: "Enter your GitHub username:" });
-    const confirmed = await confirm({
-      message: `Username is ${username}, confirm?`,
-    });
-
-    if (!confirmed) {
-      username = await input({ message: "Enter your GitHub username:" });
-    }
-    saveConfig({ ...config, username });
-
-    const token = await password({
-      message: "Enter your GitHub personal access token:",
-    });
-    saveConfig({ ...config, token });
-
-    console.log("Setup complete.");
+  let username = await input({ message: "Enter your GitHub username:" });
+  const confirmed = await confirm({
+    message: `Username is ${username}, confirm?`,
   });
+
+  if (!confirmed) {
+    username = await input({ message: "Enter your GitHub username:" });
+  }
+  saveConfig({ ...config, username });
+
+  const token = await password({
+    message: "Enter your GitHub personal access token:",
+  });
+  saveConfig({ ...config, token });
+
+  console.log("Setup complete.");
+});
 
 const repo = program.command("repo").description("Repository commands");
 
