@@ -47,4 +47,15 @@ repo
     response.data.forEach(({ name }: { name: string }) => console.log(name));
   });
 
+const config = program.command("config").description("Configuration commands");
+config
+  .command("--list")
+  .description("Show current configuration")
+  .action(() => {
+    const config = loadConfig();
+    console.log("Current configuration:");
+    console.log(`Username: ${config.username}`);
+    console.log(`Token: ${config.token}`);
+  });
+
 program.parse();
