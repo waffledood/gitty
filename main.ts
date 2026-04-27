@@ -58,4 +58,14 @@ config
     console.log(`Token: ${config.token}`);
   });
 
+config
+  .command("username")
+  .argument("<username>", "GitHub username")
+  .description("Set GitHub username")
+  .action((username) => {
+    const config = loadConfig();
+    saveConfig({ ...config, username });
+    console.log("Username updated.");
+  });
+
 program.parse();
