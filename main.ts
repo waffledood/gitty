@@ -48,15 +48,14 @@ repo
   });
 
 const config = program.command("config").description("Configuration commands");
-config
-  .command("--list")
-  .description("Show current configuration")
-  .action(() => {
-    const config = loadConfig();
-    console.log("Current configuration:");
-    console.log(`Username: ${config.username}`);
-    console.log(`Token: ${config.token}`);
-  });
+config.option("--list", "Show current configuration");
+
+if (config.opts().list) {
+  const cfg = loadConfig();
+  console.log("Current configuration:");
+  console.log(`\tUsername: ${cfg.username}`);
+  console.log(`\tToken: ${cfg.token}`);
+}
 
 config
   .command("username")
