@@ -1,22 +1,42 @@
-# gitty
+# gitty 🤠
 
 A TypeScript CLI for interacting with GitHub repositories, issues, and workflows from your terminal.
 
-## Setup
+## Installation
 
-1. Run the following command to create a copy of the `.env` file:
+### Prerequisites
 
-   ```shell
-   # bash/powershell
-   cp .env-copy .env
-   ```
+- Node.js >= 20
 
-2. Update the properties inside `.env`
+```shell
+$ npm i -g @waffledood/gitty
+```
 
-## Misc
+## First-time Setup
 
-Packages to consider for creating a CLI:
+When using `gitty` for the first time, you will need to set it up. Run the command:
 
-- `inquirer`
-- `prompts`
-- `commander`
+```shell
+$ gitty auth setup
+```
+
+```shell
+$ gitty auth setup
+✔ Enter your GitHub username: cowboy-randy
+✔ Username is cowboy-randy, confirm? Yes
+✔ Enter your GitHub personal access token:
+Setup complete.
+```
+
+## Usage
+
+```shell
+# List your GitHub repositories
+$ gitty repo list
+
+# Re-run setup (update username or token)
+$ gitty auth setup
+
+# Show all available commands
+$ gitty --help
+```
