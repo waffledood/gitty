@@ -5,6 +5,7 @@ import ok from "./octokit.js";
 
 const program = new Command();
 program.name("gitty").description("GitHub CLI tool").version("1.0.0");
+program.configureHelp({ sortSubcommands: true });
 
 const setup = program.command("setup").description("Setup gitty");
 
