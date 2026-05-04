@@ -1,5 +1,9 @@
 # gitty 🤠
 
+![](https://img.shields.io/badge/Node.js-20%2B-brightgreen?style=flat-square) [![npm]](https://www.npmjs.com/package/@waffledood/gitty)
+
+[npm]: https://img.shields.io/npm/v/@waffledood/gitty.svg?style=flat-square
+
 A TypeScript CLI for interacting with GitHub repositories, issues, and workflows from your terminal.
 
 ## Installation
